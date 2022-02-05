@@ -24,36 +24,38 @@ from scipy.integrate import simps
 
 from pathlib import Path
 
-# Paths based on user setup.
+# Paths based on user setup.  If this was going to be used more frequently, I would have put
+# these, as well as any other parameters, into a separate config file and written a parser
+# which reads those parameters and assigns them.
 save_loc = 'C:/Users/timhe/OneDrive/Documents/StatsWorkFolder/CS5526/Plots/';
 file_location = 'C:/Users/timhe/Temple Coursework/TempleData/ForestFire/forestfires.csv';
 
 
 # Transformation functions for response variable.
-def areaTransformFn(area_val):
+def area_transform_fn(area_val):
     area_out = np.log(area_val + 1);
     return area_out;
 
-def invertAreaTransformFn(area_val_proc):
+def invert_area_transform_fn(area_val_proc):
     outval = np.e ** (area_val_proc) - 1;
     return outval;
 
-def areaTransformFnLog2(area_val):
+def area_transform_fn_log2(area_val):
     area_out = np.log2(area_val + 1);
     return area_out;
 
 def identity(area_val):
     return area_val;
 
-def invertAreaTransformFnLog2(area_val_proc):
+def invert_area_transform_fn_log2(area_val_proc):
     outval = 2 ** (area_val_proc) - 1;
     return outval;
 
-def areaTransformFnLog2Sqrt(area_val):
+def area_transform_fn_log2_sqrt(area_val):
     area_out = np.sqrt(np.log2(area_val + 1));
     return area_out;
 
-def invertAreaTransformFnLog2Sqrt(area_val_proc):
+def invert_area_transform_fn_log2_sqrt(area_val_proc):
     outval = 2 ** (area_val_proc**2) - 1;
     return outval;
 
@@ -198,7 +200,7 @@ def plot_performance(y_pred, y_actual, y_pred_orig, tech_name, tech_name_legend,
     
     return AUC, MAD, RMSE;
 
-# Can be used to evaluate any SKLearn regressor (I originally was going to experiment with several more sklearn regressors)
+# Can be used to evaluate any SKLearn regressor (Note:  I originally was going to experiment with several more sklearn regressors)
 def evalute_regressor(regressor, input_data_matrix, area_vals_transformed, area_inv, save_loc, tech_name, tech_name_legend):
     kf = KFold(n_splits=10, shuffle=True);
     num_samples = len(input_data_matrix[:,0]);
@@ -216,11 +218,11 @@ def evalute_regressor(regressor, input_data_matrix, area_vals_transformed, area_
     
         regressor.fit(train_samples, train_areas);
         y_pred = regressor.predict(test_samples);
-        tempDf = pd.DataFrame();
-        tempDf.insert(0, 'y_pred', y_pred);
-        tempDf.insert(1, 'y_actual', np.array(test_areas));
-        tempDf.insert(2, 'y_pred_orig', y_pred);
-        test_out = pd.concat([test_out, tempDf]);
+        temp_df = pd.DataFrame();
+        temp_df.insert(0, 'y_pred', y_pred);
+        temp_df.insert(1, 'y_actual', np.array(test_areas));
+        temp_df.insert(2, 'y_pred_orig', y_pred);
+        test_out = pd.concat([test_out, temp_df]);
 
     # area_vals = df.area.transform(areaTransformFn);
     test_out.y_pred = test_out.y_pred.transform(area_inv);
@@ -314,19 +316,15 @@ input_matricies.append(df_quad);
 
 # Now make the transformations for each response variable.
 area_orig = df_orig.area;
-area_vals = df_orig.area.transform(areaTransformFn);
-area_l2 = df_orig.area.transform(areaTransformFnLog2);
-area_l2_sqrt = df_orig.area.transform(areaTransformFnLog2Sqrt);
+area_vals = df_orig.area.transform(area_transform_fn);
+area_l2 = df_orig.area.transform(area_transform_fn_log2);
+area_l2_sqrt = df_orig.area.transform(area_transform_fn_log2_sqrt);
 
-area_transforms = [areaTransformFn, areaTransformFnLog2, areaTransformFnLog2Sqrt];
-inverse_area_transforms = [invertAreaTransformFn, invertAreaTransformFnLog2, invertAreaTransformFnLog2Sqrt];
+area_transforms = [area_transform_fn, area_transform_fn_log2, area_transform_fn_log2_sqrt];
+inverse_area_transforms = [invert_area_transform_fn, invert_area_transform_fn_log2, invert_area_transform_fn_log2_sqrt];
 
 
-# # 
-#
 #  We'll be using 5-fold cross validation.  This part begins the grid search.  
-#
-# #
 
 # Start off by using the params in the paper for the SVM to replicate their results.
 C = 3
@@ -346,7 +344,7 @@ Path(svm_save).mkdir(parents=True, exist_ok=True);
 
 df_scaled = centerer.fit_transform(df_fm);
 
-AUC, MAD, RMSE  = evalute_regressor(svr_orig, df_scaled, area_vals, invertAreaTransformFn, svm_save, 'SVM_{}'.format(tech_name), 'SVM');
+AUC, MAD, RMSE  = evalute_regressor(svr_orig, df_scaled, area_vals, invert_area_transform_fn, svm_save, 'SVM_{}'.format(tech_name), 'SVM');
 line = 'SVM_Orig stats:  AUC: {} , MAD: {} , RMSE: {} \n'.format(AUC, MAD, RMSE);
 print(line);
 stats_f.write(line)
@@ -361,9 +359,9 @@ fn_names = ('natLog', 'log2', 'log2Sqrt');
 for i in range(len(input_matricies)):
     for f in range(len(area_transforms)):
         input_data_matrix = input_matricies[i];
-        myTransform = area_transforms[f];
-        myInverse = inverse_area_transforms[f];
-        my_areas = myTransform(area_orig);
+        my_transform = area_transforms[f];
+        my_inverse = inverse_area_transforms[f];
+        my_areas = my_transform(area_orig);
         
         # Do an SVM for each input type / response variable transformation.
         svr_orig = SVR(C=C, epsilon=epsilon, gamma=gamm);
@@ -371,7 +369,7 @@ for i in range(len(input_matricies)):
         tech_name = '{}_{}'.format(input_names[i], fn_names[f]);
         Path(svm_save).mkdir(parents=True, exist_ok=True);
         
-        AUC, MAD, RMSE  = evalute_regressor(svr_orig, input_data_matrix, my_areas, myInverse, svm_save, 'SVM_{}'.format(tech_name), 'SVM');
+        AUC, MAD, RMSE  = evalute_regressor(svr_orig, input_data_matrix, my_areas, my_inverse, svm_save, 'SVM_{}'.format(tech_name), 'SVM');
         
         line = 'SVM_{} stats:  AUC: {} , MAD: {} , RMSE: {}  \n'.format(tech_name, AUC, MAD, RMSE);
         print(line);
@@ -426,14 +424,14 @@ for i in range(len(input_matricies)):
                                                     evals=[(dmat_train, "train"), (dmat_test, "test")])
     
                         y_pred_orig = tweedie_booster.predict(dmat_test)                    
-                        y_predict = myInverse(y_pred_orig);
+                        y_predict = my_inverse(y_pred_orig);
                         y_actual = np.array(area_orig[test_inxes]);
     
-                        tempDf = pd.DataFrame();
-                        tempDf.insert(0, 'y_pred', y_predict);
-                        tempDf.insert(1, 'y_actual', y_actual);
-                        tempDf.insert(2, 'y_pred_orig', y_pred_orig);
-                        test_out = pd.concat([test_out, tempDf]);
+                        temp_df = pd.DataFrame();
+                        temp_df.insert(0, 'y_pred', y_predict);
+                        temp_df.insert(1, 'y_actual', y_actual);
+                        temp_df.insert(2, 'y_pred_orig', y_pred_orig);
+                        test_out = pd.concat([test_out, temp_df]);
                         itr = itr + 1;
 
                     test_out = test_out.sort_values(by='y_actual', ascending=True);
