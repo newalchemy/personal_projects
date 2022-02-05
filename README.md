@@ -8,7 +8,7 @@ Welcome to my repository!  Here you will find several programming / machine lear
  
  The first two projects are the .inpynb files in the top directory, and the last one is in the forestFire directory.
  
-These projects were written as standalone, small scale, short lifetime, programming assignments instead of software engineering 
+These projects were written as standalone, small scale, short lifetime, programming assignments.  This is opposed to software engineering 
 projects part of a multiperson effort to produce a multiversion program with a longer expected lifetime, or analysis tools/capabilities 
 part of a larger ecosystem such as a shared repository.  There's several things
 that I would do differently if I was writing these projects inside of an enterprise, including:
