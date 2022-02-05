@@ -6,6 +6,8 @@ Welcome to my repository!  Here you will find several programming / machine lear
  - Diagnosing Psychiatric Illness with an LSTM, using a very similar method to one used in NLP Sentiment Analysis
  - Using XGBoost to predict forest fire size
  
+ The first two projects are the .inpynb files in the top directory, and the last one is in the forestFire directory.
+ 
 These projects were written as standalone programming assignments instead of software engineering projects.  There's several things
 that I would do differently if I was writing these projects inside of an enterprise, including:
  - Making each script configurable with an outside configuration file that's loaded and parsed, so users can test multiple different 
