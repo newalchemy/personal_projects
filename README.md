@@ -8,7 +8,8 @@ Welcome to my repository!  Here you will find several programming / machine lear
  
  The first two projects are the .inpynb files in the top directory, and the last one is in the forestFire directory.
  
-These projects were written as standalone programming assignments instead of software engineering projects.  There's several things
+These projects were written as standalone, small scale, short lifetime, programming assignments instead of software engineering 
+projects part of a multiperson effort to produce a multiversion program with a longer expected lifetime.  There's several things
 that I would do differently if I was writing these projects inside of an enterprise, including:
  - Making each script configurable with an outside configuration file that's loaded and parsed, so users can test multiple different 
  configurations easily.
