@@ -21,9 +21,9 @@ that I would do differently if I was writing these projects inside of an enterpr
  - Separate helper functions into utility folders instead of keeping them within the main script for running experiments, which makes it 
  easier for teammates to use them if they wish.
  - Provide separate consideration to data loading, storage, and management.  In each of these cases, the data used was either stored 
- online and downloaded with its own API, or stored in .csv files.  If the data were stored in a database(possibly on a separate server), 
+ online and downloaded with its own API, or stored static in .csv files.  If the data were stored in a database(possibly on a separate server), 
  then we would need to think about how the data is stored and the best way to query it, with regards to runtime.  
  If the data were too large to fit into RAM, we'd have to delete and reload different batches of data into memory during each training 
- step (I may go back and do this for the Psychiatric Illness project in the future).
+ step (I may go back and do this for the Psychiatric Illness project in the future).  There may be other things to consider in practice, too.
  
 If you have any suggestions or contributions, please feel free to message me.  I hope you enjoy looking at this repository.
