@@ -4,7 +4,7 @@
 
 Fire size prediction is a great problem to apply machine learning to.  There are already many indicators which warn people about the forest fire risk at a given time/place, so it's natural to try to predict the size of any given forest fire based on those indicators.  This is a project that I made for a machine learning class in graduate school which attempts to fit a regression model to predict the size of a forest fire.  The task was to choose a problem and dataset off of Kaggle and write a machine learning model for it.  I chose this dataset because it is a self-described "hard" regression problem, and I thought I would enjoy trying it (I did), and that it would be a good learning experience (it was).  
 
-This markdown file is a description of the project, the approach, and the results of the project.
+This markdown file is a description of the project, the approach, the results of the project, and ways of changing the approach to make a more effective and useful model.
 
 ## Dataset Description, Robust Regression, and Zero Inflated-Regression
 
