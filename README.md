@@ -16,7 +16,6 @@ There's several things that I would do differently(depending on what I was using
 inside of an enterprise, including:
  - Making each script configurable with an outside configuration file that's loaded and parsed, so users can test multiple different 
  configurations easily.
- - Not hardcode any parameters, at all.
  - Automatically store generated plots and performance data into sub-directories which also store the passed configuration by copying
  it into there.  Provide different titles to the plots (sometimes based on the configuration), all to ensure that someone looking at  
  the data can quickly determine what configuration was run and what information they are supposed to learn from the plots.
