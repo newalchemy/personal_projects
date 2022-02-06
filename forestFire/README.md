@@ -196,7 +196,7 @@ X | Y | month | day	| FFMC | DMC | DC | ISI | temp | RH | wind | rain | area
 
 While that's a very ad-hoc analysis, taken with the information above, it may be that these features are non-predictive of forest fire size. (Note:  The reason I didn't do this type of analysis initially was because it was posted on kaggle, mentioned in a published paper, and the features themselves all seemed reasonably predictive of forest fire size).
 
-## Building a better model?
+## New approach = more useful model?
 
 It may be possible to build a forest fire model.  First, adding more samples and more features might help.  Such features would include the response time of the fire department, how many other fires were ongoing at the start of the fire, how long the fire is believed to have been burning before the firefighters were able to respond, etc.
 
